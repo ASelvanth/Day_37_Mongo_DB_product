@@ -655,4 +655,11 @@ B39WD> db.products.find({'product_material':"Soft"},{'_id':0});
 B39WD> db.products.find({'product_color':'indigo','product_price':492.00});
 
 No data found
+--------------------------------------------------------------------
+10..Delete the products which product price value are same
 
+db.products.aggregate([
+    { "$group": { "_id": "$product_price", "count": { "$sum": 1 } } },
+    { "$match": { "_id": { "$ne": null }, "count": { "$gt": 1 } } },
+    { "$project": { "duplicate": "$_id", "_id": 0 } }
+])
